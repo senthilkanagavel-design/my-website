@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeroLink | AI-Driven Healthcare RCM</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --primary-blue: #0f172a; /* Deep Navy */
+            --primary-teal: #0d9488; /* Modern Teal */
+            --teal-light: #ccfbf1;
+            --accent-orange: #f97316;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --bg-light: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--white);
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span { color: var(--primary-teal); }
+        .logo i { margin-right: 8px; font-size: 22px; color: var(--primary-teal); }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { font-weight: 500; font-size: 15px; color: var(--text-dark); transition: 0.3s; }
+        .nav-links a:hover { color: var(--primary-teal); }
+
+        .btn-nav {
+            background-color: var(--primary-teal);
+            color: var(--white) !important;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .mobile-menu-btn { display: none; font-size: 24px; cursor: pointer; }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(13, 148, 136, 0.8)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 85vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+            margin-top: 80px;
+        }
+
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-family: 'Poppins', sans-serif; font-size: 48px; margin-bottom: 20px; font-weight: 700; letter-spacing: -1px; }
+        .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
+
+        .btn-hero {
+            display: inline-block;
+            background-color: var(--accent-orange);
+            color: var(--white);
+            padding: 16px 32px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-hero:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3); }
+
+        /* --- METRICS SECTION --- */
+        .metrics-section { padding: 80px 0; background-color: var(--white); }
+        .metrics-container { display: flex; flex-wrap: wrap; gap: 50px; align-items: center; }
+        .metrics-text { flex: 1; min-width: 300px; }
+        .metrics-text h2 { font-family: 'Poppins', sans-serif; font-size: 32px; color: var(--primary-blue); margin-bottom: 15px; }
+        .check-list li { margin-bottom: 12px; display: flex; align-items: center; font-weight: 500; color: var(--text-dark); }
+        .check-list li i { color: var(--primary-teal); margin-right: 12px; }
+
+        /* DASHBOARD UI */
+        .dashboard-mockup {
+            flex: 1; min-width: 350px;
+            background: #f8fafc; border: 1px solid #e2e8f0;
+            border-radius: 16px; padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .dash-header { display: flex; justify-content: space-between; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .dash-title { font-weight: 700; color: var(--primary-blue); display: flex; align-items: center; gap: 8px; }
+        .grade-badge { background: #fef08a; color: #854d0e; padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 13px; }
+        
+        .kpi-row { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px; }
+        .kpi-box { text-align: center; flex: 1; background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .kpi-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 18px; font-weight: 700; color: var(--primary-blue); margin-top: 4px; }
+        .kpi-bad { color: #ef4444; }
+
+        .finding-alert { margin-top: 20px; background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 4px; }
+        .finding-title { color: #ef4444; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .finding-text { font-size: 13px; color: var(--text-dark); }
+
+        /* --- INNOVATIVE SERVICES SECTION --- */
+        .services { padding: 80px 0; background-color: var(--bg-light); }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px auto; }
+        .section-header h2 { font-family: 'Poppins', sans-serif; font-size: 36px; color: var(--primary-blue); margin-bottom: 10px; }
+        
+        /* 4-Column Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* NEW CARD DESIGN */
+        .tech-card {
+            background: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-teal);
+        }
+
+        /* Image Area */
+        .card-image-wrapper {
+            position: relative;
+            height: 160px;
+            overflow: hidden;
+            background-color: #eee;
+        }
+
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .tech-card:hover .card-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        /* Floating Badge */
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(13, 148, 136, 0.9);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Content Area */
+        .card-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        
+        .card-content h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .card-content p { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 15px; }
+
+        /* Toggle Button */
+        .card-footer {
+            margin-top: auto;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--primary-teal);
+            font-weight: 600;
+        }
+
+        .toggle-icon { transition: transform 0.3s ease; }
+        .rotate { transform: rotate(180deg); }
+
+        /* Hidden Details Content (UPDATED to match original request) */
+        .tech-details {
+            display: none;
+            background: #f8fafc;
+            padding: 10px 20px 20px 20px;
+            border-top: 1px solid #e2e8f0;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        /* RESTORED BULLET STYLE */
+        .detail-list {
+            padding-left: 0;
+            margin-top: 10px;
+        }
+        
+        .detail-list li {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.5;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .detail-list li::before {
+            content: "•";
+            color: var(--primary-teal);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .detail-list strong {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- CONTACT SECTION --- */
+        .contact-section { background-color: #f1f5f9; padding: 80px 0; }
+        .form-box { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; color: var(--primary-blue); }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; transition: 0.3s; }
+        .form-control:focus { outline: none; border-color: var(--primary-teal); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1); }
+
+        /* --- FOOTER --- */
+        footer { background-color: var(--primary-blue); color: #cbd5e1; padding: 60px 0 20px; font-size: 14px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--white); margin-bottom: 20px; font-size: 16px; font-weight: 600; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; background: var(--white); padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .metrics-container { flex-direction: column; }
+            .services-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo"><i class="fa-solid fa-link"></i> Vero<span>Link</span></a>
+            <div class="mobile-menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav class="nav-links" id="navLinks">
+                <a href="#home">Home</a>
+                <a href="#metrics">Health Scorecard</a>
+                <a href="#services">Services</a>
+                <a href="#contact" class="btn-nav">Get Practice Audit</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>Smarter Billing. <br>Healthier Revenue.</h1>
+            <p>VeroLink combines AI-driven analysis with expert US coding to recover lost revenue and accelerate your cash flow.</p>
+            <button class="btn-hero" onclick="location.href='#contact'">Request Strategy Session</button>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="metrics-section">
+        <div class="container">
+            <div class="metrics-container">
+                <div class="metrics-text">
+                    <h2>The VeroLink "Health Scorecard"</h2>
+                    <p>We don't guess. We verify. Our proprietary "Deep-Scan" audit analyzes your last 6 months of data to find hidden leaks.</p>
+                    <ul class="check-list">
+                        <li><i class="fas fa-check-circle"></i> Identifying Missed Charges</li>
+                        <li><i class="fas fa-check-circle"></i> Denial Root Cause Analysis</li>
+                        <li><i class="fas fa-check-circle"></i> Payer Contract Variance</li>
+                    </ul>
+                </div>
+                <!-- Mockup Dashboard -->
+                <div class="dashboard-mockup">
+                    <div class="dash-header">
+                        <span class="dash-title"><i class="fas fa-chart-bar"></i> Audit Results</span>
+                        <span class="grade-badge">Grade: C+</span>
+                    </div>
+                    <div class="kpi-row">
+                        <div class="kpi-box">
+                            <div class="kpi-label">Clean Claims</div>
+                            <div class="kpi-value kpi-bad">82%</div>
+                        </div>
+                        <div class="kpi-box">
+                            <div class="kpi-label">Days in AR</div>
+                            <div class="kpi-value">48</div>
+                        </div>
+                        <div class="kpi-box">
+                            <div class="kpi-label">Denial Rate</div>
+                            <div class="kpi-value kpi-bad">12%</div>
+                        </div>
+                    </div>
+                    <div class="finding-alert">
+                        <div class="finding-title"><i class="fas fa-exclamation-triangle"></i> Revenue Alert</div>
+                        <div class="finding-text">Found <strong>$42,500</strong> in recoverable claims aged >90 days.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INNOVATIVE SERVICES SECTION -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Intelligent RCM Solutions</h2>
+                <p>Advanced technology meets human expertise.</p>
+            </div>
+            
+            <div class="services-grid">
+                
+                <!-- CARD 1: BILLING -->
+                <div class="tech-card" onclick="toggleService('s1', 'i1')">
+                    <div class="card-image-wrapper">
+                        <!-- Finance Image -->
+                        <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Finance Data">
+                        <span class="card-badge">Cash Flow</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>End-to-End Billing</h3>
+                        <p>Seamless lifecycle management from appointment to deposit.</p>
+                        <div class="card-footer">
+                            <span>Click to see details</span>
+                            <i id="i1" class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                    </div>
+                    <!-- RESTORED CONTENT -->
+                    <div id="s1" class="tech-details">
+                        <ul class="detail-list">
+                            <li><strong>Demographics:</strong> Patient eligibility verification prior to visit.</li>
+                            <li><strong>Charge Entry:</strong> Accurate capture of billable services within 24 hours.</li>
+                            <li><strong>Claims Submission:</strong> Electronic (EDI) submission with 99% first-pass acceptance.</li>
+                            <li><strong>Payment Posting:</strong> ERA/EFT posting and reconciliation against bank deposits.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 2: CODING -->
+                <div class="tech-card" onclick="toggleService('s2', 'i2')">
+                    <div class="card-image-wrapper">
+                        <!-- Image: Doctor working on laptop/data -->
+                        <img src="https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Medical Coding">
+                        <span class="card-badge">Compliance</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Coding & Audits</h3>
+                        <p>Certified coding accuracy to prevent audits and maximize value.</p>
+                        <div class="card-footer">
+                            <span>Click to see details</span>
+                            <i id="i2" class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                    </div>
+                    <!-- RESTORED CONTENT -->
+                    <div id="s2" class="tech-details">
+                        <ul class="detail-list">
+                            <li><strong>Certification:</strong> Services by AAPC & AHIMA certified coders.</li>
+                            <li><strong>Standards:</strong> ICD-10-CM, CPT, and HCPCS Level II compliance.</li>
+                            <li><strong>Optimization:</strong> Modifier usage and NCCI edit validation to prevent rejections.</li>
+                            <li><strong>CDI:</strong> Feedback to doctors on Clinical Documentation Improvement.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 3: DENIALS -->
+                <div class="tech-card" onclick="toggleService('s3', 'i3')">
+                    <div class="card-image-wrapper">
+                        <!-- Growth/Recovery Image -->
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Data Recovery">
+                        <span class="card-badge">Recovery</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Denial Management</h3>
+                        <p>Aggressive pursuit of unpaid claims and aging accounts.</p>
+                        <div class="card-footer">
+                            <span>Click to see details</span>
+                            <i id="i3" class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                    </div>
+                    <!-- RESTORED CONTENT -->
+                    <div id="s3" class="tech-details">
+                        <ul class="detail-list">
+                            <li><strong>Root Cause Analysis:</strong> Identifying why claims are rejected (Coding vs Admin).</li>
+                            <li><strong>Appeals:</strong> Timely filing of corrected claims and formal appeals.</li>
+                            <li><strong>Old AR Cleanup:</strong> Dedicated team for claims aged 90+ days.</li>
+                            <li><strong>Payer Follow-up:</strong> Direct phone calls to insurance reps to resolve stalls.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CARD 4: HEALTH SCORECARD -->
+                <div class="tech-card" onclick="toggleService('s4', 'i4')">
+                    <div class="card-image-wrapper">
+                        <!-- Dashboard/Analytics Image -->
+                        <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Analytics">
+                        <span class="card-badge">Insight</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Practice Health Scorecard</h3>
+                        <p>Data-driven audit to reveal financial health and gaps.</p>
+                        <div class="card-footer">
+                            <span>Click to see details</span>
+                            <i id="i4" class="fas fa-chevron-down toggle-icon"></i>
+                        </div>
+                    </div>
+                    <!-- RESTORED CONTENT -->
+                    <div id="s4" class="tech-details">
+                        <ul class="detail-list">
+                            <li><strong>Historical Audit:</strong> 6-month retrospective analysis of your charges and payments.</li>
+                            <li><strong>Benchmarking:</strong> Comparing your practice KPIs against MGMA standards.</li>
+                            <li><strong>Leakage Report:</strong> Identifying under-coding or missed billable procedures.</li>
+                            <li><strong>Action Plan:</strong> A roadmap to fix process gaps and boost collection by 20%.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="color: var(--primary-blue); margin-bottom: 10px;">Start Your Financial Recovery</h2>
+                <p style="color: var(--text-light);">No obligations. Just data.</p>
+            </div>
+
+            <div class="form-box">
+                <form onsubmit="event.preventDefault(); alert('Thank you! We will analyze your request and contact you shortly.');">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" class="form-control" placeholder="Dr. John Doe" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Practice Name / Billing Company Name</label>
+                        <input type="text" class="form-control" placeholder="e.g. City Cardiology or Top Billing Solutions" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" class="form-control" placeholder="name@company.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Monthly Collections Volume</label>
+                        <select class="form-control">
+                            <option>Under $50k / month</option>
+                            <option>$50k - $150k / month</option>
+                            <option>$150k - $500k / month</option>
+                            <option>Over $500k / month</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-hero" style="width: 100%; border: none;">Request Analysis</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 20px;"><i class="fa-solid fa-link"></i> <span style="color: white;">Vero</span><span style="color: var(--primary-teal);">Link</span></div>
+                    <p style="line-height: 1.8; opacity: 0.8;">
+                        Connecting US Healthcare to Revenue through AI-driven RCM services.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li><a href="#">Health Scorecard</a></li>
+                        <li><a href="#">RCM Services</a></li>
+                        <li><a href="#">Credentialing</a></li>
+                        <li><a href="#">Denial Recovery</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p style="margin-bottom: 10px;"><i class="fas fa-envelope"></i> info@verolink.com</p>
+                    <p><i class="fas fa-phone"></i> (888) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VeroLink Healthcare Services. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menu Toggle
+        function toggleMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Tech Card Toggle
+        function toggleService(contentId, arrowId) {
+            const content = document.getElementById(contentId);
+            const arrow = document.getElementById(arrowId);
+            
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                arrow.classList.remove("rotate");
+            } else {
+                content.style.display = "block";
+                arrow.classList.add("rotate");
+            }
+        }
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+                const navLinks = document.getElementById('navLinks');
+                if(navLinks.classList.contains('active')) navLinks.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
